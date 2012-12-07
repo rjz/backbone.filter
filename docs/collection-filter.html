@@ -1,0 +1,57 @@
+<!DOCTYPE html>  <html> <head>   <title>collection-filter.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               collection-filter.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <h3>Backbone.CollectionFilter</h3>
+
+<p>Returns a <code>Backbone.Collection</code> containing models filtered from
+an existing <code>Backbone.Collection</code></p>
+
+<pre><code>myCollection = new MyCollection([
+  { name: "John" },
+  { name: "Joe" },
+  { name: "Jim" }
+])
+
+filter = new MyFilter
+newCollection = filter.apply(myCollection, { name: 'John' })
+</code></pre>
+
+<p>Provide options to the filter by passing them in during 
+initialization:</p>
+
+<pre><code>opts =
+  optionA: 'a'
+  optionB: 'b'
+
+filter = new MyFilter(opts)
+</code></pre>
+
+<p>Note that these options are whitelisted against the <code>defaults</code>
+attribute</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">CollectionFilter</span>
+
+  <span class="nv">defaults:</span>
+    <span class="nv">searchAttributes: </span><span class="p">[]</span>
+
+  <span class="nv">constructor: </span><span class="nf">(opts = {}) -&gt;</span>
+    <span class="nx">@options</span> <span class="o">||=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">_</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">@defaults</span><span class="p">)</span>
+      <span class="nx">@options</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">opts</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">||</span> <span class="nx">@defaults</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Filters should override the <code>comparator</code> method to provide 
+their own comparators. Implementations should take a model
+in the context of the current filter.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">comparator: </span><span class="nf">(model) -&gt;</span>
+    <span class="k">for</span> <span class="nx">attribute</span> <span class="k">in</span> <span class="nx">@options</span><span class="p">.</span><span class="nx">searchAttributes</span>
+      <span class="k">return</span> <span class="kc">true</span> <span class="k">if</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">==</span> <span class="nx">@query</span>
+    <span class="kc">false</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>The <code>match</code> method is used to return a collection containing
+all models that pass the <code>comparator()</code> test</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nv">apply: </span><span class="nf">(collection, @query) -&gt;</span>
+    <span class="nv">models = </span><span class="nx">collection</span><span class="p">.</span><span class="nx">filter</span> <span class="nx">@comparator</span><span class="p">,</span> <span class="nx">@</span>
+    <span class="k">new</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">constructor</span> <span class="nx">models</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Patch Backbone's <code>Collection.filter</code> method to support collection
+filters.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nx">do</span> <span class="nf">(Backbone) -&gt;</span>
+  <span class="nv">filterFunc = </span><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Collection</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">filter</span>
+
+  <span class="nv">Backbone.Collection.prototype.filter = </span><span class="nf">(meth, args...) -&gt;</span>
+    <span class="k">if</span> <span class="nx">meth</span><span class="p">.</span><span class="nx">comparator</span><span class="o">?</span> <span class="c1"># Instantiated filter, cool.</span>
+      <span class="nx">meth</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">@</span><span class="p">,</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="nx">meth</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">comparator</span><span class="o">?</span> <span class="c1"># Filter, cool.</span>
+      <span class="nv">query = </span><span class="nx">args</span><span class="p">.</span><span class="nx">pop</span><span class="p">()</span>
+      <span class="nv">filter = </span><span class="k">new</span> <span class="nx">meth</span> <span class="nx">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="nv">results = </span><span class="nx">filter</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">@</span><span class="p">,</span> <span class="nx">query</span><span class="p">)</span>
+    <span class="k">else</span>
+      <span class="nx">filterFunc</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">@</span><span class="p">,</span> <span class="p">[</span><span class="nx">meth</span><span class="p">].</span><span class="nx">concat</span><span class="p">(</span><span class="nx">args</span><span class="p">...))</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
