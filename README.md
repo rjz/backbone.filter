@@ -12,11 +12,24 @@ filters!
 
     var results = myCollection.filter(nameFilter);
 
-You can even pass an array of filters to be run in turn:
+Or you can apply a list of filters in sequence:
 
     var orderByNameFilter = new Backbone.Filters.sortBy(function (model) {
         return model.get('name');
     });
 
     var results = myCollection.filter([nameFilter,orderByNameFilter]);
+
+To get things started, `Backbone.Filter` provides filter classes for many of the 
+[underscore methods](http://documentcloud.github.com/backbone/#Collection-Underscore-Methods), 
+including:
+
+* filter
+* invoke
+* reject
+* select
+* shuffle
+* sortBy
+* without
+
 
