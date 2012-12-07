@@ -29,14 +29,16 @@
       return new collection.constructor(collection.models);
     };
 
+    // Piggyback onto Backbone's `extend` method
+    Filter.extend = Backbone.Collection.extend;
+
     return Filter;
 
   })();
 
   // Add underscore methods
-  _.each(['filter','invoke','reject','select','shuffle','sortBy','without'], function (key) {
-    var extend = Backbone.Collection.extend;
-    Backbone.Filters[key] = extend.call(Backbone.Filter, {
+  _.each(['filter','first','invoke','last','reject','select','shuffle','sortBy','without'], function (key) {
+    Backbone.Filters[key] = Backbone.Filter.extend({
       constructor: function () {
         this.args = [].slice.call(arguments, 0);
       },

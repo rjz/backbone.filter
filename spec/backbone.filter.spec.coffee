@@ -30,12 +30,11 @@ describe 'Backbone.Filter', ->
       expect(Backbone.Filters instanceof Object).toBeTruthy()
 
     it 'includes filters from underscore methods', ->
-      for key in ['sortBy']
-        filter = new Backbone.Filters[key]((m) -> m.attributes.name)
+      for key in ['filter','first','invoke','last','reject','select','shuffle','sortBy','without']
+        filter = new Backbone.Filters[key]
         expect(filter instanceof Backbone.Filter).toBeTruthy()
-        result = collection.filter(filter)
 
-    it 'can pass arguments to a filters created from underscore methods', ->
+    it 'can pass arguments to filters created from underscore methods', ->
 
       age = 33
 
@@ -44,6 +43,13 @@ describe 'Backbone.Filter', ->
 
       result = collection.filter(filter, age)
       expect(result.length).toEqual(getExpectedResult(Fixtures.testModels, 'age', age).length)
+
+    describe 'Backbone.Filters.first', ->
+
+      it 'chooses first items from collection', ->
+        first2 = new Backbone.Filters.first(2)
+        result = collection.filter(first2)
+        expect(result.length).toEqual(2)
 
   describe 'patched Backbone.Collection.filter', ->
 
