@@ -33,15 +33,20 @@ Or apply a list of filters in sequence!
 ### Using built-in filters
 
 To create a filter based on one of the provided filter classes, just create
-a new instance of the filter with appropriate arguments:
+new instances of filter with appropriate arguments. Passing the filter to a 
+collection's `filter` method will return a new collection containing the 
+filter's results. In this case, the first three items of the collection will 
+be returned:
 
-    var limit3 = new Backbone.Filter.first(3);
-
-Passing the filter to a collection's `filter` method will return a new
-collection containing the filter's results. In this case, the first three
-items of the collection will be returned:
+    var random = new Backbone.Filter.shuffle,
+        limit3 = new Backbone.Filter.first(3);
 
     var first3 = myCollection.filter(limit3);
+    var entropized = myCollection.filter(random)
+
+They can also be chained using array notation:
+
+    var random3 = myCollection.filter([random,limit3]);
 
 ### Writing filter classes
 
