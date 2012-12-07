@@ -11,12 +11,9 @@
 
     function Filter (opts) {
 
-      var key, 
-          keys = _.keys(this.defaults);
+      var key, keys = _.keys(this.defaults);
 
-      if (opts == null) {
-        opts = {};
-      }
+      if (opts == null) opts = {};
 
       while (key = keys.pop()) {
         this.options[key] = opts[key] || this.defaults[key];
@@ -57,7 +54,9 @@
     var collection = this;
 
     if (filter instanceof Array) {
-      _.each(filter, function (f) { collection = collection.filter(f) });
+      _.each(filter, function (f) {
+        collection = collection.filter(f) 
+      });
     }
     else if (filter instanceof Backbone.Filter) {
       collection = filter.run(this, args);

@@ -10,15 +10,24 @@ filters!
         return names.indexOf(model.get('name')) > -1;
     });
 
-    var results = myCollection.filter(nameFilter);
+    var myCollection = new MyCollection([
+      { name: 'Cathcart' },
+      { name: 'Yossarian' },
+      { name: 'Peckem' },
+      { name: 'Dreedle' }
+    ]);
 
-Or you can apply a list of filters in sequence:
+    var results = myCollection.filter(nameFilter); 
+    //  results = Cathcart, Peckem, Dreedle
+
+Or apply a list of filters in sequence!
 
     var orderByNameFilter = new Backbone.Filters.sortBy(function (model) {
         return model.get('name');
     });
 
-    var results = myCollection.filter([nameFilter,orderByNameFilter]);
+    var results = myCollection.filter([nameFilter, orderByNameFilter]);
+    //  results = Cathcart, Dreedle, Peckem
 
 To get things started, `Backbone.Filter` provides filter classes for many of the 
 [underscore methods](http://documentcloud.github.com/backbone/#Collection-Underscore-Methods), 
