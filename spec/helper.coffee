@@ -6,6 +6,8 @@ class TestModel extends Backbone.Model
     age: '',
     sex: '',
     name: ''
+  validate: ->
+    'Invalid' if @attributes.valid? && !@attributes.valid
 
 class TestCollection extends Backbone.Collection
   model: TestModel

@@ -1,6 +1,6 @@
 require './helper.coffee'
 require '../src/backbone.filter.js'
-require '../src/stats.coffee'
+require '../src/stats.js'
 
 describe 'Backbone.Filter.Stats', ->
 

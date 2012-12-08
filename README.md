@@ -6,10 +6,10 @@ recycle your own!
 
     // A collection
     var myCollection = new MyCollection([
-      { name: 'Cathcart' },
-      { name: 'Yossarian' },
-      { name: 'Peckem' },
-      { name: 'Dreedle' }
+        { name: 'Cathcart' },
+        { name: 'Yossarian' },
+        { name: 'Peckem' },
+        { name: 'Dreedle' }
     ]);
 
     // A filter
@@ -24,11 +24,18 @@ recycle your own!
 Or apply a list of filters in sequence!
 
     var orderByNameFilter = new Backbone.Filters.sortBy(function (model) {
-        return model.get('name');
-    });
+            return model.get('name');
+        }),
+        limit2 = new Backbone.Filters.first(2);
 
-    var results = myCollection.filter([nameFilter, orderByNameFilter]);
-    //  results = Cathcart, Dreedle, Peckem
+    // Applying a filter chain
+    var filters = [
+            nameFilter,        // Remove Yossarian
+            orderByNameFilter, // Sort by name
+            limit2             // Pick first two names
+        ];
+        
+     var firstTwo = myCollection.filter(filters);
 
 ### Using built-in filters
 
