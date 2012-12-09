@@ -1,6 +1,8 @@
 (function (Backbone) {
 
-  var oldFilter = Backbone.Collection.prototype.filter;
+  var oldFilter = Backbone.Collection.prototype.filter,
+      aliases = {};
+
   Backbone.Filters = {};
 
   // Base class for describing Backbone Filters
@@ -31,6 +33,33 @@
 
     // Piggyback onto Backbone's `extend` method
     Filter.extend = Backbone.Collection.extend;
+
+    // Provide aliasing (for the truly lazy)
+    _.extend(Filter, {
+        define: function (alias, filter) {
+            if (aliases.hasOwnProperty(alias)) {
+                throw('Filter alias ' + alias + ' is already defined');
+            } else {
+                aliases[alias] = filter;
+            }
+        },
+
+        undefine: function (alias, filter) {
+            if (aliases.hasOwnProperty(alias)) {
+                delete aliases[alias];
+            } else {
+                throw('Unknown filter alias ' + alias);
+            }
+        },
+
+        lookup: function (alias) {
+            if (aliases.hasOwnProperty(alias)) {
+                return aliases[alias];
+            }
+
+            return null;
+        }
+    });
 
     return Filter;
 
@@ -63,11 +92,17 @@
     else if (filter instanceof Backbone.Filter) {
       collection = filter.run(this, args);
     }
+    else if (_.isString(filter)) {
+      var filters = _.map(filter.split('|'), function (alias) {
+          return Backbone.Filter.lookup(alias);
+      });
+      collection = collection.filter(filters);
+    }
     else {
       collection = oldFilter.apply(collection, arguments);
     }
 
     return collection;
-  }
+  };
 
 })(Backbone);
