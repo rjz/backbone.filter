@@ -1,3 +1,7 @@
+/**
+ *  Filters for summarizing the data in Backbone collections.
+ *  See: https://github.com/rjz/backbone.filter
+ */
 (function (Backbone) {
 
     Backbone.Filters = Backbone.Filters || {};
@@ -58,17 +62,52 @@
         }
     });
 
-    Stats.Stdev = Base.extend({
-
+    Stats.Min = Base.extend({
         run: function (collection) {
+            var attribute = this.options.attribute;
+            return Math.min.apply(Math, collection.pluck(attribute));
+        }
+    });
 
+    Stats.Max = Base.extend({
+        run: function (collection) {
+            var attribute = this.options.attribute;
+            return Math.max.apply(Math, collection.pluck(attribute));
+        }
+    });
+
+    Stats.Limits = Base.extend({
+        run: function (collection) {
+            var min = this.stat('Min', collection), 
+                max = this.stat('Max', collection);
+            return [min, max];
+        }
+    });
+
+    Stats.Range = Base.extend({
+        run: function (collection) {
+            var min = this.stat('Min', collection), 
+                max = this.stat('Max', collection);
+            return max - min;
+        }
+    });
+
+    Stats.Variance = Base.extend({
+        run: function (collection) {
             var attribute = this.options.attribute,
-                mean = this.stat('Mean', collection);
-                xbar = collection.reduce(function(memo, m) {
+                mean = this.stat('Mean', collection),
+                xbar = collection.reduce(function (memo, m) {
                     return memo + Math.pow(m.get(attribute) - mean, 2);
                 }, 0);
 
-            return Math.sqrt(xbar / collection.length);
+            return xbar / collection.length;
+        }
+    });
+
+    Stats.Stdev = Base.extend({
+        run: function (collection) {
+            var sigma2 = this.stat('Variance', collection);
+            return Math.sqrt(sigma2);
         }
     });
 
