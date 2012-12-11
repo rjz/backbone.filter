@@ -75,7 +75,7 @@ be used by subsequent filters. What really matters, though, is that the output
 of each preceding filter matches the input expected by the next filter in a 
 chain.
 
-## Built-in filters
+### Included filters
 
 To get things started, `Backbone.Filter` provides filter classes for many of the 
 [underscore methods](http://documentcloud.github.com/backbone/#Collection-Underscore-Methods).
@@ -97,5 +97,17 @@ of models in a collection. By default, they're also attached to `Backbone.Filter
 * Stats.Sum
 * Stats.Mean
 * Stats.Median
+* Stats.Min
+* Stats.Max
+* Stats.Range
+* Stats.Limis
+* Stats.Variance
 * Stats.Stdev
 
+## Contributing
+
+Contributions are welcome!
+
+1) Fork this repo
+2) Add your changes and update the spec as needed
+3) Submit a [pull request](help.github.com/pull-requests/)
