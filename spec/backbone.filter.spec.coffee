@@ -91,6 +91,10 @@ describe 'Backbone.Filter', ->
     beforeEach ->
       collection = new TestCollection(Fixtures.testModels)
 
+    it 'retains existing behavior', ->
+      iterator = (model) -> model.get('name')[1] == 'o'
+      expect(collection.filter(iterator)).toEqual(collection.select(iterator))
+
     it 'can filter with a Filter instance', ->
       age = 33
       ageFilter = new Backbone.Filters.select (m) -> m.attributes.age == age
