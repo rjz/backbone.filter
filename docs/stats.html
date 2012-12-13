@@ -1,46 +1,118 @@
-<!DOCTYPE html>  <html> <head>   <title>stats.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="backbone.filter.html">                 backbone.filter.js               </a>                                           <a class="source" href="stats.html">                 stats.coffee               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               stats.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span> <span class="o">||=</span> <span class="p">{}</span>
+<!DOCTYPE html>  <html> <head>   <title>stats.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="backbone.filter.html">                 backbone.filter.js               </a>                                           <a class="source" href="examples.html">                 examples.js               </a>                                           <a class="source" href="stats.html">                 stats.js               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               stats.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="cm">/**</span>
+<span class="cm"> *  Filters for summarizing the data in Backbone collections.</span>
+<span class="cm"> *  See: https://github.com/rjz/backbone.filter</span>
+<span class="cm"> */</span>
+<span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">Backbone</span><span class="p">)</span> <span class="p">{</span>
 
-<span class="nv">Stats = </span><span class="p">{}</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Base class for statistics filters. Provides <code>stat</code> 
-utility for retrieving the results of other statistical
-operations and <code>sort</code> utility for sorting a collection.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Base</span> <span class="k">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filter</span>
+    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span> <span class="o">||</span> <span class="p">{};</span>
 
-  <span class="nv">defaults:</span>
-    <span class="nv">attribute: </span><span class="s">&#39;&#39;</span>
+    <span class="nx">Stats</span> <span class="o">=</span> <span class="p">{};</span>
 
-  <span class="nv">sort: </span><span class="nf">(collection) -&gt;</span>
-    <span class="nv">attribute = </span><span class="nx">@options</span><span class="p">.</span><span class="nx">attribute</span>
-    <span class="nv">sortFilter = </span><span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span><span class="p">.</span><span class="nx">sortBy</span> <span class="nf">(m) -&gt;</span> <span class="nx">m</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span>
-    <span class="nx">collection</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">sortFilter</span><span class="p">)</span>
+    <span class="kd">var</span> <span class="nx">Base</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filter</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
 
-  <span class="nv">stat: </span><span class="nf">(op, collection) -&gt;</span>
-    <span class="nv">statFilter = </span><span class="k">new</span> <span class="nx">Stats</span><span class="p">[</span><span class="nx">op</span><span class="p">](</span><span class="nv">attribute: </span><span class="nx">@options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">)</span>
-    <span class="nx">collection</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">statFilter</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Sum value for the specified <code>attribute</code> in the filtered 
-collection</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Stats</span><span class="p">.</span><span class="nx">Sum</span> <span class="k">extends</span> <span class="nx">Base</span>
-  <span class="nv">run: </span><span class="nf">(collection) -&gt;</span>
-    <span class="nv">attribute = </span><span class="nx">@options</span><span class="p">.</span><span class="nx">attribute</span>
-    <span class="nv">reducer = </span><span class="nf">(memo, model) -&gt;</span> <span class="nx">memo</span> <span class="o">+</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span>
-    <span class="nx">collection</span><span class="p">.</span><span class="nx">reduce</span> <span class="nx">reducer</span><span class="p">,</span> <span class="mi">0</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Find mean value for the specified <code>attribute</code> in the 
-filtered collection</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Stats</span><span class="p">.</span><span class="nx">Mean</span> <span class="k">extends</span> <span class="nx">Base</span>
-  <span class="nv">run: </span><span class="nf">(collection) -&gt;</span>
-    <span class="nx">@stat</span><span class="p">(</span><span class="s">&#39;Sum&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="o">/</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">length</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Find median value for the specified <code>attribute</code> in the 
-filtered collection</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Stats</span><span class="p">.</span><span class="nx">Median</span> <span class="k">extends</span> <span class="nx">Base</span>
-  <span class="nv">run: </span><span class="nf">(collection) -&gt;</span>
-    <span class="nv">attribute = </span><span class="nx">@options</span><span class="p">.</span><span class="nx">attribute</span>
-    <span class="nv">sorted = </span><span class="nx">@sort</span><span class="p">(</span><span class="nx">collection</span><span class="p">)</span>
-    <span class="nv">index = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">sorted</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">attribute</span><span class="o">:</span> <span class="s1">&#39;&#39;</span>
+        <span class="p">},</span>
 
-    <span class="k">if</span> <span class="nx">sorted</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">2</span>
-      <span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span>
-    <span class="k">else</span>
-      <span class="nv">lo = </span><span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span>
-      <span class="nv">hi = </span><span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span>
-      <span class="p">(</span><span class="nx">lo</span> <span class="o">+</span> <span class="nx">hi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Compute standard deviation for the specified <code>attribute</code>
-in the filtered collection</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="k">class</span> <span class="nx">Stats</span><span class="p">.</span><span class="nx">Stdev</span> <span class="k">extends</span> <span class="nx">Base</span>
-  <span class="nv">run: </span><span class="nf">(collection) -&gt;</span>
-    <span class="nv">attribute = </span><span class="nx">@options</span><span class="p">.</span><span class="nx">attribute</span>
-    <span class="nv">mean = </span><span class="nx">@stat</span><span class="p">(</span><span class="s">&#39;Mean&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span>
-    <span class="nv">reducer = </span><span class="nf">(memo, m) -&gt;</span> <span class="nx">memo</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">-</span> <span class="nx">mean</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="nv">xbar = </span><span class="nx">collection</span><span class="p">.</span><span class="nx">reduce</span> <span class="nx">reducer</span><span class="p">,</span> <span class="mi">0</span>
-    <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">xbar</span> <span class="o">/</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Attach <code>Stats</code> filters</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="nv">Backbone.Filters.Stats = </span><span class="nx">Stats</span>
+        <span class="nx">sort</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">,</span>
+                <span class="nx">sortFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span><span class="p">.</span><span class="nx">sortBy</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">m</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+                <span class="p">});</span>
+            <span class="k">return</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">sortFilter</span><span class="p">);</span>
+        <span class="p">},</span>
+
+        <span class="nx">stat</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">op</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">statFilter</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Stats</span><span class="p">[</span><span class="nx">op</span><span class="p">]({</span>
+                <span class="nx">attribute</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span>
+            <span class="p">});</span>
+            <span class="k">return</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">filter</span><span class="p">(</span><span class="nx">statFilter</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Sum</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">model</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="nx">memo</span> <span class="o">+</span> <span class="nx">model</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+            <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Mean</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Sum&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">)</span> <span class="o">/</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Median</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">lo</span><span class="p">,</span> <span class="nx">hi</span><span class="p">,</span> 
+                <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">,</span>
+                <span class="nx">sorted</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">sort</span><span class="p">(</span><span class="nx">collection</span><span class="p">),</span>
+                <span class="nx">index</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">((</span><span class="nx">sorted</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">sorted</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+              <span class="k">return</span> <span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="nx">lo</span> <span class="o">=</span> <span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+              <span class="nx">hi</span> <span class="o">=</span> <span class="nx">sorted</span><span class="p">.</span><span class="nx">at</span><span class="p">(</span><span class="nx">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">);</span>
+              <span class="k">return</span> <span class="p">(</span><span class="nx">lo</span> <span class="o">+</span> <span class="nx">hi</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Min</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nb">Math</span><span class="p">,</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">attribute</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Max</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">;</span>
+            <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">max</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nb">Math</span><span class="p">,</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">pluck</span><span class="p">(</span><span class="nx">attribute</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Limits</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">),</span> 
+                <span class="nx">max</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Max&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">);</span>
+            <span class="k">return</span> <span class="p">[</span><span class="nx">min</span><span class="p">,</span> <span class="nx">max</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Range</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">min</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Min&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">),</span> 
+                <span class="nx">max</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Max&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nx">max</span> <span class="o">-</span> <span class="nx">min</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Variance</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">attribute</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">attribute</span><span class="p">,</span>
+                <span class="nx">mean</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Mean&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">),</span>
+                <span class="nx">xbar</span> <span class="o">=</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">memo</span><span class="p">,</span> <span class="nx">m</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="k">return</span> <span class="nx">memo</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">m</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">attribute</span><span class="p">)</span> <span class="o">-</span> <span class="nx">mean</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+                <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="nx">xbar</span> <span class="o">/</span> <span class="nx">collection</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Stats</span><span class="p">.</span><span class="nx">Stdev</span> <span class="o">=</span> <span class="nx">Base</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+        <span class="nx">run</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">collection</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">sigma2</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stat</span><span class="p">(</span><span class="s1">&#39;Variance&#39;</span><span class="p">,</span> <span class="nx">collection</span><span class="p">);</span>
+            <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">sigma2</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+
+    <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Filters</span><span class="p">.</span><span class="nx">Stats</span> <span class="o">=</span> <span class="nx">Stats</span><span class="p">;</span>
+
+<span class="p">})(</span><span class="nx">Backbone</span><span class="p">);</span>
 
 </pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
