@@ -100,7 +100,7 @@ of models in a collection. By default, they're also attached to `Backbone.Filter
 * Stats.Min
 * Stats.Max
 * Stats.Range
-* Stats.Limis
+* Stats.Limits
 * Stats.Variance
 * Stats.Stdev
 
