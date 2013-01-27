@@ -57,9 +57,9 @@ They can also be chained using array notation:
 
 ### Writing filter classes
 
-Filters are derived from `Backbone.Filter` and include a `run` method for
-accepting `Backbone.Collection` arguments. Beyond that, though, development
-is their show.
+Filters are derived from `Backbone.Filter`. They'll need to include a `run` 
+method that accepts a single `Backbone.Collection` arguments, but the details
+of their implementation are left intentionally vague:
 
     var MyFilterClass = Backbone.Filter.extend({
       run: function (collection) {
@@ -69,11 +69,10 @@ is their show.
 
 ### Filter chaining
 
-Unless a filter returns a single value (see the `Stats` filters for an example),
-it will probably want to return an instance of the same `Collection` classes to
-be used by subsequent filters. What really matters, though, is that the output
-of each preceding filter matches the input expected by the next filter in a 
-chain.
+Filters that don't reduce to a single value (e.g. the included `Stats` filters)
+will probably want to return an instance of the same `Collection` class that
+they received. As long as each filter in a chain returns a result that the next
+filter can understand, however, chains of filters will run to completion.
 
 ### Included filters
 
@@ -108,6 +107,6 @@ of models in a collection. By default, they're also attached to `Backbone.Filter
 
 Contributions are welcome!
 
-1) Fork this repo
-2) Add your changes and update the spec as needed
-3) Submit a [pull request](help.github.com/pull-requests/)
+  1. Fork this repo
+  2. Add your changes and update the spec as needed
+  3. Submit a [pull request](help.github.com/pull-requests/)
