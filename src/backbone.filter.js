@@ -1,4 +1,4 @@
-(function (Backbone) {
+(function (_, Backbone) {
 
   var oldFilter = Backbone.Collection.prototype.filter,
       aliases = {};
@@ -78,31 +78,36 @@
     });
   });
 
-  // Patch `Backbone.Collection.filter` method to support filters
-  Backbone.Collection.prototype.filter = function (filter) {
+  // Evaluates a single filter, a chained array of filters, or a 
+  // string list of filter aliases
+  var runFilters = function (collection, filter) {
 
-    var args = [].slice.call(arguments, 1);
-    var collection = this;
+    var args = [].slice.call(arguments, 2),
+        recurse = function (filter) {
+          collection = runFilters.apply(this, [collection, filter].concat(args))
+        };
 
-    if (filter instanceof Array) {
-      _.each(filter, function (f) {
-        collection = collection.filter(f) 
-      });
-    }
-    else if (filter instanceof Backbone.Filter) {
-      collection = filter.run(this, args);
-    }
-    else if (_.isString(filter)) {
-      var filters = _.map(filter.split('|'), function (alias) {
-          return Backbone.Filter.lookup(alias);
-      });
-      collection = collection.filter(filters);
+    if (filter instanceof Backbone.Filter) {
+      collection = filter.run(collection, args);
     }
     else {
-      collection = oldFilter.apply(collection, arguments);
+      if (_.isString(filter)) {
+        filter = _.map(filter.split('|'), Backbone.Filter.lookup)
+      }
+      _.each(filter, recurse);
     }
 
     return collection;
   };
 
-})(Backbone);
+  // Patch `Backbone.Collection.filter` method to support filters
+  Backbone.Collection.prototype.filter = function (filter) {
+    if (_.isFunction(filter)) {
+      return oldFilter.apply(this, arguments);
+    }
+    else {
+      return runFilters.apply(this, [this].concat([].slice.call(arguments)));
+    }
+  };
+
+})(_, Backbone);
