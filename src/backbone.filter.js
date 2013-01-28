@@ -22,36 +22,35 @@
       }
     });
 
-
     // Provide aliasing (for the truly lazy)
     _.extend(Filter, {
 
-        // Piggyback onto Backbone's `extend` method
-        extend: Backbone.Collection.extend,
+      // Piggyback onto Backbone's `extend` method
+      extend: Backbone.Collection.extend,
 
-        define: function (alias, filter) {
-            if (_exists(aliases, alias)) {
-                throw('Filter alias ' + alias + ' is already defined');
-            } else {
-                aliases[alias] = filter;
-            }
-        },
+      define: function (alias, filter) {
+          if (_exists(aliases, alias)) {
+              throw('Filter alias ' + alias + ' is already defined');
+          } else {
+              aliases[alias] = filter;
+          }
+      },
 
-        undefine: function (alias, filter) {
-            if (_exists(aliases, alias)) {
-                delete aliases[alias];
-            } else {
-                throw('Unknown filter alias ' + alias);
-            }
-        },
+      undefine: function (alias, filter) {
+          if (_exists(aliases, alias)) {
+              delete aliases[alias];
+          } else {
+              throw('Unknown filter alias ' + alias);
+          }
+      },
 
-        lookup: function (alias) {
-            if (_exists(aliases, alias)) {
-                return aliases[alias];
-            }
+      lookup: function (alias) {
+          if (_exists(aliases, alias)) {
+              return aliases[alias];
+          }
 
-            return null;
-        }
+          return null;
+      }
     });
 
     return Filter;
