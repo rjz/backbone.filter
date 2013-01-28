@@ -22,11 +22,13 @@
       }
     });
 
-    // Piggyback onto Backbone's `extend` method
-    Filter.extend = Backbone.Collection.extend;
 
     // Provide aliasing (for the truly lazy)
     _.extend(Filter, {
+
+        // Piggyback onto Backbone's `extend` method
+        extend: Backbone.Collection.extend,
+
         define: function (alias, filter) {
             if (_exists(aliases, alias)) {
                 throw('Filter alias ' + alias + ' is already defined');
