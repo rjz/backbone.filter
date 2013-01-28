@@ -2,7 +2,8 @@
 
   var oldFilter = Backbone.Collection.prototype.filter,
       aliases = {},
-      _exists = function (obj, key) { return obj.hasOwnProperty(key); }
+      _exists = function (obj, key) { return obj.hasOwnProperty(key); },
+      _slice = [].slice;
 
   Backbone.Filters = {};
 
@@ -61,7 +62,7 @@
   _.each(['filter','first','invoke','last','reject','select','shuffle','sortBy','without'], function (key) {
     Backbone.Filters[key] = Backbone.Filter.extend({
       constructor: function () {
-        this.args = [].slice.call(arguments, 0);
+        this.args = _slice.call(arguments, 0);
       },
       run: function (collection) {
         var models = _[key].apply(_, [collection.models].concat(this.args));
@@ -74,7 +75,7 @@
   // string list of filter aliases
   var runFilters = function (collection, filter) {
 
-    var args = [].slice.call(arguments, 2),
+    var args = _slice.call(arguments, 2),
         recurse = function (filter) {
           collection = runFilters.apply(this, [collection, filter].concat(args))
         };
@@ -98,7 +99,7 @@
       return oldFilter.apply(this, arguments);
     }
     else {
-      return runFilters.apply(this, [this].concat([].slice.call(arguments)));
+      return runFilters.apply(this, [this].concat(_slice.call(arguments)));
     }
   };
 
