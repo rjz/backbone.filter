@@ -16,9 +16,6 @@
     _.extend(Filter.prototype, {
       defaults: {},
       options: {},
-      comparator: function (model) {
-        return true;
-      },
       run: function (collection, query) {
         this.query = query;
         return new collection.constructor(collection.models);
