@@ -1,7 +1,8 @@
 (function (_, Backbone) {
 
   var oldFilter = Backbone.Collection.prototype.filter,
-      aliases = {};
+      aliases = {},
+      _exists = function (obj, key) { return obj.hasOwnProperty(key); }
 
   Backbone.Filters = {};
 
@@ -37,7 +38,7 @@
     // Provide aliasing (for the truly lazy)
     _.extend(Filter, {
         define: function (alias, filter) {
-            if (aliases.hasOwnProperty(alias)) {
+            if (_exists(aliases, alias)) {
                 throw('Filter alias ' + alias + ' is already defined');
             } else {
                 aliases[alias] = filter;
@@ -45,7 +46,7 @@
         },
 
         undefine: function (alias, filter) {
-            if (aliases.hasOwnProperty(alias)) {
+            if (_exists(aliases, alias)) {
                 delete aliases[alias];
             } else {
                 throw('Unknown filter alias ' + alias);
@@ -53,7 +54,7 @@
         },
 
         lookup: function (alias) {
-            if (aliases.hasOwnProperty(alias)) {
+            if (_exists(aliases, alias)) {
                 return aliases[alias];
             }
 
