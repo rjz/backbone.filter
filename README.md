@@ -110,3 +110,7 @@ Contributions are welcome!
   1. Fork this repo
   2. Add your changes and update the spec as needed
   3. Submit a [pull request](help.github.com/pull-requests/)
+
+## License
+
+MIT License
