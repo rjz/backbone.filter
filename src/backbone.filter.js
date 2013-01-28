@@ -13,14 +13,7 @@
     Filter.prototype.options = {};
 
     function Filter (opts) {
-
-      var key, keys = _.keys(this.defaults);
-
-      if (opts == null) opts = {};
-
-      while (key = keys.pop()) {
-        this.options[key] = opts[key] || this.defaults[key];
-      }
+      this.options = _.defaults(_.pick(opts, _.keys(this.defaults)), this.defaults);
     }
 
     Filter.prototype.comparator = function (model) {
