@@ -9,21 +9,21 @@
   // Base class for describing Backbone Filters
   Backbone.Filter = (function () {
 
-    Filter.prototype.defaults = {};
-    Filter.prototype.options = {};
-
     function Filter (opts) {
       this.options = _.defaults(_.pick(opts, _.keys(this.defaults)), this.defaults);
     }
 
-    Filter.prototype.comparator = function (model) {
-      return true;
-    };
-
-    Filter.prototype.run = function (collection, query) {
-      this.query = query;
-      return new collection.constructor(collection.models);
-    };
+    _.extend(Filter.prototype, {
+      defaults: {},
+      options: {},
+      comparator: function (model) {
+        return true;
+      },
+      run: function (collection, query) {
+        this.query = query;
+        return new collection.constructor(collection.models);
+      }
+    });
 
     // Piggyback onto Backbone's `extend` method
     Filter.extend = Backbone.Collection.extend;
