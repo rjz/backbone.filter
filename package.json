@@ -1,6 +1,6 @@
 {
   "name": "backbone-filters",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "dependencies": {
     "jasmine-node":  ">=1.0.27",
@@ -9,7 +9,7 @@
     "coffee-script": ">=1.4.0"
   },
   "scripts": {
-    "test": "jasmine-node --coffee spec"
+    "test": "node ./node_modules/jasmine-node/bin/jasmine-node --coffee ./spec"
   },
   "license": "BSD"
 }

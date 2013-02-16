@@ -102,14 +102,22 @@ describe 'Backbone.Filter', ->
       expect(result.length).toEqual(getExpectedResult(Fixtures.testModels, 'age', age).length)
 
     it 'can filter with an array of filters', ->
+      nameMapFilter = Backbone.Filter.extend
+        defaults: key: '...'
+        run: (collection) ->
+          collection.map (model) => model.get(@options.key)
+
+      nameMap = new nameMapFilter key: 'name'
+
       sortByName = new Backbone.Filters.sortBy (m) -> m.attributes.name
       filterBySecondLetter = new Backbone.Filters.select (m) -> m.attributes.name[1] == 'o'
-      result = collection.filter([filterBySecondLetter,sortByName])
+      result = collection.filter [filterBySecondLetter,sortByName,nameMap]
 
-      expected = collection.filter(filterBySecondLetter)
-      expected = expected.filter(sortByName)
+      expected = collection.filter filterBySecondLetter
+      expected = expected.filter sortByName
+      expected = expected.filter nameMap
 
-      expect(result.pluck('name')).toEqual(expected.pluck('name'))
+      expect(result).toEqual expected
       
     it 'can filter with a single alias', ->
       one = new Backbone.Filters.sortBy (m) -> m.attributes.name
