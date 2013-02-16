@@ -45,8 +45,8 @@ collection's `filter` method will return a new collection containing the
 filter's results. In this case, the first three items of the collection will 
 be returned:
 
-    var random = new Backbone.Filter.shuffle,
-        limit3 = new Backbone.Filter.first(3);
+    var random = new Backbone.Filters.shuffle,
+        limit3 = new Backbone.Filters.first(3);
 
     var first3 = myCollection.filter(limit3);
     var entropized = myCollection.filter(random)
