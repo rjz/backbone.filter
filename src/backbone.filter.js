@@ -1,4 +1,16 @@
-(function (_, Backbone) {
+(function(root, factory) {
+  // Set up Backbone.Filter appropriately for the environment.
+  if (typeof exports !== 'undefined') {
+    // Node/CommonJS.
+    factory(require('underscore'), require('backbone'));
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['underscore', 'backbone'], factory);
+  } else {
+    // Browser globals
+    factory(root._, root.Backbone);
+  }
+}(this, function(_, Backbone) {
 
   var oldFilter = Backbone.Collection.prototype.filter,
       aliases = {},
@@ -103,4 +115,4 @@
     }
   };
 
-})(_, Backbone);
+}));
